@@ -23,3 +23,50 @@ from pycricbuzz import Cricbuzz
 import speedtest
 import random
 
+# setting up the voices and engine to accept commands for system from user.
+engine=pyttsx3.init("sapi5")
+voices=engine.getProperty("voices")
+engine.setProperty("voice", voices[1].id)
+engine.setProperty("rate",130)
+
+def speak(text):   # speak function/module of system..help in converting text to voice.
+    engine.say(text)
+    engine.runAndWait()
+
+def acceptcommands():   # module for accepting voice input from user and recognizes with google_recognize. and converting into text string.
+    c = sr.Recognizer()
+    with sr.Microphone() as source:
+        speak("Listening---")
+        c.pause_threshold=0.5
+        c.energy_threshold= 100
+        audio=c.listen(source)
+
+    try:
+        print("recognizing")
+        query=c.recognize_google(audio,language="en-in")
+        speak(query)
+        print(f"user said: {query}")
+    except Exception as error:
+        # speak("can't recognize..please speak again...")
+        return "NONE"
+    return query
+
+contacts={"xyz":["+9191xxxxxxxx","user_mail@gmail.com"]}   #sample contact list for sending message,emails.
+
+def accept_wake_commands(wake):   # capture the wake up command from user.
+    c = sr.Recognizer()
+    with sr.Microphone() as source:
+        speak("I am at sleep mode sir")
+        c.pause_threshold=0.5
+        c.energy_threshold= 100
+        audio=c.listen(source)
+
+    try:
+        print("sleeping")
+        query=c.recognize_google(audio,language="en-in")
+        speak(query)
+        print(f"user said: {query}")
+    except Exception as error:
+        pass
+        return "NONE"
+    return query
